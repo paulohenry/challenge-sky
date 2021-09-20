@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "version": "1.0.0",
-    "title": "Coodesh Challenge 1",
+    "title": "SKY Challenge",
     "termsOfService": "http://swagger.io/terms/",
     "contact": {
       "email": "paulo.junior.engenheiro@gmail.com"
@@ -20,15 +20,16 @@
     }
   ],
   "tags": [
-    { "name": "Session", "description": "Operations about Log in with a  User" },
-    { "name": "Users CRUD", "description": "Operations about Users" }
+    { "name": "Session", "description": "Operations about log in with a  User" },
+    { "name": "CRUD", "description": "Operations about user" },
+    { "name": "Register", "description": "Register one new user" }
   ],
   "security": {
     "bearerAuth": []
   },
   "schemes": ["http"],
   "paths": {
-    "/login": {
+    "/signin": {
       "post": {
         "tags": ["Session"],
         "summary": "Log in  user with account",
@@ -70,6 +71,47 @@
                   "$ref": "#/components/responses/ServerError"
                 }
               }
+            }
+          }
+        }
+      }
+    },
+    "/signup": {
+      "post": {
+        "tags": ["Register"],
+        "summary": "Register user account",
+        "description": "here you may register user, so click **try it out**",
+        "operationId": "registerUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "register With Success",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/get-one-user": {
+      "get": {
+        "tags": ["CRUD"],
+        "summary": "get One User",
+        "description": "swagger não foi finalizado, pode ser chamado via postman",
+        "operationId": "getUser",
+        "responses": {
+          "201": {
+            "description": "register With Success",
+            "content": {
+              "application/json": {}
             }
           }
         }
@@ -116,7 +158,7 @@
       }
     },
     "schemas": {
-      "UpdateUser": {
+      "RegisterUser": {
         "type": "object",
         "properties": {
           "email": {
@@ -125,51 +167,35 @@
             "example": "admin@admin.com",
             "description": "follow format pattern format email **this is required** "
           },
-          "name": {
+          "nome": {
             "type": "string",
             "example": "João"
           },
-          "gender": {
+          "senha": {
             "type": "string",
-            "example": "male"
+            "example": "qwertY@12"
           },
-          "username": {
-            "type": "string",
-            "example": "teste"
-          },
-          "born": {
-            "type": "string",
-            "example": "2021-01-01T10:00:00Z"
-          },
-          "age": {
-            "type": "number",
-            "example": 23
-          },
-          "registeredAt": {
-            "type": "string",
-            "example": "2021-01-01T10:00:00Z"
-          },
-          "ageWhenRegistered": {
-            "type": "number",
-            "example": 23
-          },
-          "phone": {
-            "type": "string",
-            "example": "(13)3323-2323"
-          },
-          "cell": {
-            "type": "string",
-            "example": "(13)99923-2323"
-          },
-          "nat": {
-            "type": "string",
-            "example": "BR"
+          "telefones": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ddd": {
+                  "type": "string",
+                  "example": "13"
+                },
+                "numero": {
+                  "type": "string",
+                  "example": "999999999"
+                }
+              }
+            }
           }
         }
       },
       "LoginUser": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": ["email", "senha"],
         "properties": {
           "email": {
             "type": "string",
@@ -177,7 +203,7 @@
             "example": "admin@admin.com",
             "description": "follow format pattern format email **this is required** "
           },
-          "password": {
+          "senha": {
             "type": "password",
             "example": "qwertY@12",
             "description": "need have just 1 Uppercase letter 1 number 1 special caractere and minimal 8 digits **this is required**"
@@ -186,12 +212,7 @@
       },
       "ResponseWithToken": {
         "type": "object",
-        "properties": {
-          "accessToken": {
-            "type": "string",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
-          }
-        }
+        "properties": {}
       },
       "ErrorsMessages": {
         "type": "object",
