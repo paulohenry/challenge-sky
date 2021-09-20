@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: challenge-sky-config-map
+  namespace: challenges
+data:
+    PORT: '4000'
+    JWT_SECRET: "secretKey"
+    SECRET_KEY: "challenge"
+    NODE_ENV: "development"
+    DATABASE_URL: "service-url-database"
+    TZ: America/Sao_Paulo
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: challenge-sky
+    namespace: challenges
+spec:
+    replicas: 1
+    revisionHistoryLimit: 0
+    selector:
+        matchLabels:
+            app: challenge-sky
+    template:
+        metadata:
+            labels:
+                app: challenge-sky
+        spec:
+            imagePullSecrets:
+                - name: regcred
+            containers:
+                - name: challenge-sky
+                  image: paulohenryjr/challenge-sky:latest
+                  envFrom:
+                        - configMapRef:
+                            name: challenge-sky-config-map
+ 
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: challenge-sky-http
+  namespace: default
+  labels:
+    app: challenge-sky-http
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 4000
+      targetPort: 4000
+      name: http
+  selector:
+    app: challenge-sky
+

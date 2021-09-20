@@ -1,0 +1,8 @@
+node_modules
+dist
+coverage
+.docker/db
+yarn-error.log
+gcs-keyfile.json
+.idea/
+**/.docker

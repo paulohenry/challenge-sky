@@ -1,0 +1,228 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "Coodesh Challenge 1",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "paulo.junior.engenheiro@gmail.com"
+    },
+    "license": {
+      "name": "Apache",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "description": "API que descreve os endpoints necessários ao consumo do frontend"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local Server"
+    }
+  ],
+  "tags": [
+    { "name": "Session", "description": "Operations about Log in with a  User" },
+    { "name": "Users CRUD", "description": "Operations about Users" }
+  ],
+  "security": {
+    "bearerAuth": []
+  },
+  "schemes": ["http"],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": ["Session"],
+        "summary": "Log in  user with account",
+        "description": "here you may log in for get your token, so click **try it out**",
+        "operationId": "loginUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Log in with success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseWithToken"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/responses/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/responses/ServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "in": "header",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 403
+          },
+          "message": {
+            "type": "string",
+            "example": "Requisição não autorizada"
+          }
+        },
+        "description": "return this error case client don't send bearer token in header"
+      },
+      "ServerError": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 500
+          },
+          "message": {
+            "type": "string",
+            "example": "Erro Interno"
+          }
+        },
+        "description": "return this error case api crash"
+      }
+    },
+    "schemas": {
+      "UpdateUser": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "admin@admin.com",
+            "description": "follow format pattern format email **this is required** "
+          },
+          "name": {
+            "type": "string",
+            "example": "João"
+          },
+          "gender": {
+            "type": "string",
+            "example": "male"
+          },
+          "username": {
+            "type": "string",
+            "example": "teste"
+          },
+          "born": {
+            "type": "string",
+            "example": "2021-01-01T10:00:00Z"
+          },
+          "age": {
+            "type": "number",
+            "example": 23
+          },
+          "registeredAt": {
+            "type": "string",
+            "example": "2021-01-01T10:00:00Z"
+          },
+          "ageWhenRegistered": {
+            "type": "number",
+            "example": 23
+          },
+          "phone": {
+            "type": "string",
+            "example": "(13)3323-2323"
+          },
+          "cell": {
+            "type": "string",
+            "example": "(13)99923-2323"
+          },
+          "nat": {
+            "type": "string",
+            "example": "BR"
+          }
+        }
+      },
+      "LoginUser": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "admin@admin.com",
+            "description": "follow format pattern format email **this is required** "
+          },
+          "password": {
+            "type": "password",
+            "example": "qwertY@12",
+            "description": "need have just 1 Uppercase letter 1 number 1 special caractere and minimal 8 digits **this is required**"
+          }
+        }
+      },
+      "ResponseWithToken": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+          }
+        }
+      },
+      "ErrorsMessages": {
+        "type": "object",
+        "description": "pattern of messages errors",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 500,
+            "description": "Code of errors, may a have 400,403,500"
+          },
+          "message": {
+            "type": "string",
+            "example": "Erro Interno"
+          }
+        }
+      },
+      "SuccessfullyMessages": {
+        "type": "object",
+        "description": "pattern messages of successfully",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 204,
+            "description": "Code of success, may a have 200,201,204"
+          },
+          "message": {
+            "type": "string",
+            "example": "Usuário deletado com sucesso"
+          }
+        }
+      }
+    }
+  }
+}
